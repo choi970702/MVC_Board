@@ -55,6 +55,13 @@
 		insert into board values(board_seq.nextval, #{writer}, #{title}, #{content},#{pwd}, 0,
 		#{groups}, #{step}, #{lev}, sysdate, #{file_name})
 	</insert>
+	
+	<!-- 업데이트 -->
+	<update id="update" parameterType="com.ict.db.VO">
+		update board set writer = #{writer}, title = #{title}, content = #{content},
+			 file_name = #{file_name} where idx = #{idx}
+	</update>
+	
 </mapper>
 
 

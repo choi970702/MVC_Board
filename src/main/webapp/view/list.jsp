@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
+a{text-decoration: none;}
 td {
 	text-align: center;
 	padding: 15px 10px;
@@ -71,7 +72,9 @@ table{width: 800px; margin:10px auto;}
 							<span style="color: gray; padding: 5px; border: 1px solid gray">이전으로</span>
 						</c:when>
 						<c:otherwise>
-							<span style="color: tomato; padding: 5px; border: 1px solid tomato"><a>이전으로</a></span>
+							<span style="color: tomato; padding: 5px; border: 1px solid tomato">
+								<a href="${pageContext.request.contextPath}/MyController?cmd=list&cPage=${pvo.beginBlock-pvo.pagePerBlock}">이전으로</a>
+							</span>
 						</c:otherwise>
 					</c:choose>
 					&nbsp;&nbsp;
@@ -81,7 +84,9 @@ table{width: 800px; margin:10px auto;}
 								<c:when test="${k==pvo.nowPage}">
 									<span style="background-color: tomato; padding: 5px;">${k}</span></c:when>
 								<c:otherwise>
-									<span style="color: tomato; padding: 5px;"><a>${k}</</a>
+									<span style="color: tomato; padding: 5px;">
+										<a href="${pageContext.request.contextPath}/MyController?cmd=list&cPage=${k}">${k}</</a>
+									</span>
 								</c:otherwise>
 							</c:choose>
 				   </c:forEach>
@@ -92,7 +97,9 @@ table{width: 800px; margin:10px auto;}
 							<span style="color: gray; padding: 5px; border: 1px solid gray">다음으로</span>
 						</c:when>
 						<c:otherwise>
-							<span style="color: tomato; padding: 5px; border: 1px solid tomato"><a>다음으로</a></span>
+							<span style="color: tomato; padding: 5px; border: 1px solid tomato">
+								<a href="${pageContext.request.contextPath}/MyController?cmd=list&cPage=${pvo.beginBlock+pvo.pagePerBlock}">다음으로</a>
+							</span>
 						</c:otherwise>
 					</c:choose>
 				</td>

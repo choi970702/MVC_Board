@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,50 +23,61 @@ h2{text-align: center;}
 table{width: 800px; margin:10px auto;}
 input{padding: 5px;}
 </style>
-</style>
 <script type="text/javascript">
 	function list_go(f) {
 		f.action="${pageContext.request.contextPath}/MyController?cmd=list&cPage=${cPage}";
 		f.submit();
 	}
-	function write_ok(f) {
-		// 유효성 검사
-		for (var i = 0; i < f.elements.length; i++) {
-			if(f.elements[i].value==""){
-				if(i==3||i==2) continue;
-				alert(f.elements[i].name+"을(를) 입력해주세요");
-				f.elements[i].focus();
-				return;
-			}
+	function update_ok(f) {
+		// 비밀번호 검사
+		if ("${vo.pwd}"==f.pwd.value) 
+		{
+			f.action="${pageContext.request.contextPath}/MyController?cmd=update_ok";
+			f.submit();	
+		}else
+		{
+			alert("비밀번호 틀림");
+			f.pwd.value="";
+			f.pwd.focus();
+			return;
 		}
-		f.action="${pageContext.request.contextPath}/MyController?cmd=write_ok";
-		f.submit();
 	}
 </script>
 </head>
 <body>
-	<h2>Board 글쓰기</h2>
+	<h2>Board 수정하기</h2>
 	<form  method="post" enctype="multipart/form-data">
 		<table width="700">
 		<tbody>
 			<tr>
 				<th>작성자</th>
-				<td align="left"><input type="text" name="writer"></td>
+				<td align="left"><input type="text" name="writer" value="${vo.writer }"></td>
 			</tr>
 			<tr>
 				<th>제목</th>
-				<td align="left"> <input type="text" name="title"></td>
+				<td align="left"> <input type="text" name="title" value="${vo.title }"></td>
 			</tr>
 			<tr>
 				<th>내용</th>
 				<td align="left"><script src="//cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
-				<textarea rows="10" cols="60" name="content"></textarea>
+				<textarea rows="10" cols="60" name="content">${vo.content }</textarea>
 				<script type="text/javascript">CKEDITOR.replace('content');</script>
 				</td>
 			</tr>
 			<tr>
 				<th>첨부파일</th>
-				<td align="left"><input type="file" name="file_name"></td>
+				<td align="left"><input type="file" name="file_name">
+					<c:choose>
+						<c:when test="${empty vo.file_name }">
+							<input type="file" name="file_name">이전파일없음
+							<input type="hidden" name="old_file_name" value="">
+						</c:when>
+						<c:otherwise>
+							<input type="file" name="file_name"> 이전파일(${vo.file_name})
+							<input type="hidden" name="old_file_name" value="${vo.file_name}">
+						</c:otherwise>
+					</c:choose>
+				</td>
 			</tr>
 			<tr>
 				<th>비밀번호</th>
@@ -73,7 +85,7 @@ input{padding: 5px;}
 			</tr>
 			<tr>
 				<td colspan="2">
-				<input type="button" value="입력" onclick="write_ok(this.form)" /> 
+				<input type="button" value="수정" onclick="update_ok(this.form)" /> 
 				<input type="button" value="목록" onclick="list_go(this.form)" /> 
 				<input type="reset" value="취소" />
 				<input type="hidden" name="cPage" value="${cPage }">

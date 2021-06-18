@@ -76,6 +76,15 @@ public class DAO {
 		ss.commit();
 		return result;
 	}
+	
+	// 업데이트
+	public static int getUpdate(VO vo)
+	{
+		int result = 0;
+		result = getSession().update("update", vo);
+		ss.commit();
+		return result;
+	}
 }
 
 

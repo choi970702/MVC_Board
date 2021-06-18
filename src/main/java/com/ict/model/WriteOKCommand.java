@@ -27,8 +27,9 @@ public class WriteOKCommand implements Command{
 				vo.setFile_name("");
 			}
 			int result = DAO.getInsert(vo);
+			String cPage = mr.getParameter("cPage");
 			if(result>0){
-				return "MyController?cmd=list";
+				return "MyController?cmd=list&cPage"+cPage;
 			}
 		} catch (Exception e) {
 			System.out.println(e);

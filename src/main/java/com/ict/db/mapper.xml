@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<!-- mapper가 여러개 일때 namespace 로 구분한다. -->
+<mapper namespace="board">
+	<select id="count" resultType="int">
+		select count(*) from board
+	</select>
+	<!-- groups : 원글이거나, 원글 댓글, 원글 댓글댓글 처럼
+		          원글과 관련된 묶음
+		 원글은 무조건  step과 lev 0이다.
+		 원글은 groups의 시퀀스를 장착한다.(groups는 자동증가)         
+	 -->
+	 <select id="list" parameterType="Map" resultType="com.ict.db.VO">
+	 select * from (
+	     select rownum r_num,  a.* from (
+	 		select * from board order by groups desc, lev asc ) a 
+	 		) where r_num between #{begin} and #{end}
+	 </select>
+	 
+	 <!--  idx, writer, title, content, pwd, hit, groups, step, lev, regdate, file_name -->
+	 <!-- 원글일때 groups는 시퀀스, step, lev은 0 이다. -->
+	 <insert id="insert" parameterType="com.ict.db.VO">
+	 	insert into board values(board_seq.nextval, #{writer},#{title},#{content},#{pwd},0,
+	 	group_seq.nextval, 0, 0, sysdate, #{file_name} )
+	 </insert>
+	 
+	 <!-- 조회수 업데이트 -->
+	 <update id="hit_up" parameterType="String">
+	 	update board set hit = hit+1 where idx =#{idx}
+	 </update>
+	 
+	<!-- 상세보기 -->
+	<select id="onelist" parameterType="String" resultType="com.ict.db.VO">
+		select * from board where idx = #{idx}
+	</select>
+	
+	<!-- 원글삭제 -->
+	<delete id="delete" parameterType="com.ict.db.VO">
+		delete from board where idx = #{idx}
+	</delete>
+	
+	<!-- 댓글 삽입전에 lev을 업데이트 하자 -->
+	<!-- 원글과 같은 그룹이면서 레벨이 같거나 크면 증가시키자 -->
+	<!-- 원글의 첫번째 댓글은 업데이트가 되지 않음 -->
+	<update id="levup" parameterType="Map">
+		update board set lev = lev+1 where groups = #{groups} and lev >= #{lev}
+	</update>
+	
+	<!-- 댓글 삽입 -->
+	<insert id="ans_ins" parameterType="com.ict.db.VO">
+		insert into board values (board_seq.nextval, #{writer}, #{title}, #{content}, #{pwd}, 0,
+					#{groups}, #{step}, #{lev}, sysdate, #{file_name})
+	</insert> 
+	
+	
+</mapper>
+
+
+
+
+
+
+

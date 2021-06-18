@@ -42,20 +42,19 @@
 		delete from board where idx = #{idx}
 	</delete>
 	
-	<!-- 댓글 삽입전에 lev을 업데이트 하자 -->
-	<!-- 원글과 같은 그룹이면서 레벨이 같거나 크면 증가시키자 -->
-	<!-- 원글의 첫번째 댓글은 업데이트가 되지 않음 -->
+	<!--  대글 삽입 전에 lev를 업데이트 하자  -->
+	<!--  원글과 같은 그룹이면서, 레벨이 같거나 크면 증가 시키자  -->
+	<!--  원글의 첫번째 댓글은 업데이트가 되지 않는다. -->
 	<update id="levup" parameterType="Map">
-		update board set lev = lev+1 where groups = #{groups} and lev >= #{lev}
+		update board set lev = lev+1 where groups=#{groups} and lev>=#{lev}
 	</update>
 	
 	<!-- 댓글 삽입 -->
+	 <!--  idx, writer, title, content, pwd, hit, groups, step, lev, regdate, file_name -->
 	<insert id="ans_ins" parameterType="com.ict.db.VO">
-		insert into board values (board_seq.nextval, #{writer}, #{title}, #{content}, #{pwd}, 0,
-					#{groups}, #{step}, #{lev}, sysdate, #{file_name})
-	</insert> 
-	
-	
+		insert into board values(board_seq.nextval, #{writer}, #{title}, #{content},#{pwd}, 0,
+		#{groups}, #{step}, #{lev}, sysdate, #{file_name})
+	</insert>
 </mapper>
 
 

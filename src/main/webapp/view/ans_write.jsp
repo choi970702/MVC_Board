@@ -73,10 +73,10 @@ input{padding: 5px;}
 			</tr>
 			<tr>
 				<td colspan="2">
-				<input type="button" value="댓글 입력" onclick="ans_write_ok(this.form)" /> 
+				<input type="button" value="댓글입력" onclick="ans_write_ok(this.form)" /> 
 				<input type="button" value="목록" onclick="list_go(this.form)" /> 
 				<input type="reset" value="취소" />
-				<input type="hidden" value="${cPage }" name="cPage">
+				<input type="hidden"  value="${cPage}" name="cPage"> 
 				</td>
 			</tr>
             </tbody>

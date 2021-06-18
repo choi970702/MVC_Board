@@ -11,34 +11,32 @@ import com.ict.db.VO;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
-public class Ans_Write_OKCommand implements Command
-{
+public class Ans_writeOKCommand implements Command{
 	@Override
-	public String exec(HttpServletRequest request, HttpServletResponse response) 
-	{
-		try 
-		{
+	public String exec(HttpServletRequest request, HttpServletResponse response) {
+		try {
 			String path = request.getServletContext().getRealPath("/upload");
-			MultipartRequest mr = new MultipartRequest(request, path,100*1024*1024,"utf-8",
-									new DefaultFileRenamePolicy());
+			MultipartRequest mr = 
+					new MultipartRequest(request, path,100*1024*1024,"utf-8",new DefaultFileRenamePolicy());
+			
 			String cPage = mr.getParameter("cPage");
 			
-			// 원글과 관련된 step, lev 업데이트 
-			// ex) 16,0,0
-			VO vo = (VO)(request.getSession().getAttribute("vo"));
+			// 세션에 있는 VO에서  groups, step, lev  추출해서  
+			// 16, 0, 0
+			VO vo = (VO)request.getSession().getAttribute("vo");
 			int groups = Integer.parseInt(vo.getGroups());
 			int step = Integer.parseInt(vo.getStep());
 			int lev = Integer.parseInt(vo.getLev());
 			
-			// (step, lev을 1씩 증가)
-			// ex) 16,1,1
+			// (groups, step, lev를 1씩 증가)
+			// 16, 1,  1
 			lev++;
 			step++;
 			Map<String, Integer> map = new HashMap<String, Integer>();
 			map.put("groups", groups);
 			map.put("lev", lev);
 			
-			// 기존댓글 lev 업데이트한다.(첫번째 댓글은 의미가 없다.)
+			// 기존 댓글 lev update한다.(첫번째 댓글은 의미가 없다.)
 			int result = DAO.getUp_lev(map);
 			
 			// 댓글 삽입
@@ -51,28 +49,21 @@ public class Ans_Write_OKCommand implements Command
 			ins_vo.setStep(String.valueOf(step));
 			ins_vo.setLev(String.valueOf(lev));
 			
-			if (mr.getFile("file_name") != null) 
-			{
+			if(mr.getFile("file_name") != null) {
 				ins_vo.setFile_name(mr.getFilesystemName("file_name"));
-			}else
-			{
+			}else {
 				ins_vo.setFile_name("");
 			}
 			result = DAO.getAnsInsert(ins_vo);
-			return "MyController?cmd=list&cPage="+cPage;
-		} catch (Exception e) 
-		{
+			return "MyController?cmd=list&cPage="+cPage ;
+		} catch (Exception e) {
 			System.out.println(e);
-		}finally
-		{
-			try 
-			{
-				
-			} catch (Exception e2) 
-			{
-				System.out.println(e2);
-			}
 		}
 		return null;
 	}
 }
+
+
+
+
+

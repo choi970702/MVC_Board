@@ -23,7 +23,7 @@ table{width: 800px; margin:10px auto;}
 </style>
 <script type="text/javascript">
 	function write_go() {
-		location.href="${pageContext.request.contextPath}/MyController?cmd=write";
+		location.href="${pageContext.request.contextPath}/MyController?cmd=write&cPage=${cPage}";
 	}
 </script>
 </head>
@@ -48,7 +48,12 @@ table{width: 800px; margin:10px auto;}
 					<c:forEach var="k" items="${list}" varStatus="vs">
 						<tr>
 							<td>${pvo.totalRecord-((pvo.nowPage-1)*pvo.numPerPage+vs.index)}</td>
-							<td><a href="${pageContext.request.contextPath}/MyController?cmd=onelist&idx=${k.idx}&cPage=${pvo.nowPage}">${k.title }</a></td>
+							<td style="text-align: left;">
+							<c:forEach begin="1" end="${k.step }">
+								&nbsp;&nbsp;[RE]
+							</c:forEach>
+							<a href="${pageContext.request.contextPath}/MyController?cmd=onelist&idx=${k.idx}&cPage=${pvo.nowPage}">${k.title }</a>
+							</td>
 							<td>${k.writer }</td>
 							<td>${k.regdate.substring(0,10)}</td>
 							<td>${k.hit }</td>
